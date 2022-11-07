@@ -18,8 +18,18 @@ function randonToken() {
     const token = crypto.randomBytes(8).toString('hex');
     return token;
 }
-
+function validateEmail(email) {
+    const re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  }
+function validatePassword(password) {
+    if (password.length < 6) {
+        return false;
+    } return true;
+}
 module.exports = {
     readProjectTalker,
     randonToken,
+    validateEmail,
+    validatePassword,
 };
