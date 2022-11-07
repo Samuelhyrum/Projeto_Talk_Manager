@@ -1,5 +1,5 @@
 const express = require('express');
-const { readProjectTalker } = require('../fsUtils');
+const { readProjectTalker, randonToken } = require('../fsUtils');
 
 const router = express.Router();
 
@@ -7,6 +7,9 @@ const HTTP_OK_STATUS = 200;
 const HTTP_MB_STATUS = 404;
 const messageError = {
     message: 'Pessoa palestrante não encontrada',
+  };
+  const loginError = {
+    message: 'Dados de Login invalidos',
   };
 
 router.get('/talker', async (req, res) => {
@@ -26,6 +29,16 @@ router.get('/talker/:id', async (req, res) => {
     }
     
    return res.status(HTTP_OK_STATUS).json(foundTalker);
+});
+
+router.post('/login', (req, res) => {
+  const login = { ...req.body };
+  const token = randonToken();
+
+  if (!login) {
+    return res.status(HTTP_MB_STATUS).json(loginError);
+  }
+  return res.status(HTTP_OK_STATUS).json({ token });
 });
 
 module.exports = router;
