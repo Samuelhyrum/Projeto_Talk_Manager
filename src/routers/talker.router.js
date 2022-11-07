@@ -1,41 +1,14 @@
 const express = require('express');
-const { readProjectTalker, randonToken, validateEmail,
-validatePassword } = require('../fsUtils');
+const { readProjectTalker, randonToken, validateLogin,
+ addIdInProjectTalker, validateToken, validateName, validateAge } = require('../fsUtils');
+ const { validateTalk, validateWtchedAt, validateRate } = require('../valids');
 
 const router = express.Router();
 
 const HTTP_OK_STATUS = 200;
 const HTTP_MB_STATUS = 404;
-const LOGIN_ERROR = 400;
 const messageError = {
-    message: 'Pessoa palestrante não encontrada',
-  };
-const emailError = {
-  message: 'O campo "email" é obrigatório',
-};
-const emailValid = {
-  message: 'O "email" deve ter o formato "email@email.com"',
-};
-const passwordError = {
-  message: 'O campo "password" é obrigatório',
-};
-const passwordValid = {
-  message: 'O "password" deve ter pelo menos 6 caracteres',
-};
-
-const validateLogin = (req, res, next) => {
-  const login = { ...req.body };
-    if (!login.email) {
-      return res.status(LOGIN_ERROR).json(emailError);
-    }
-    if (!login.password) {
-      return res.status(LOGIN_ERROR).json(passwordError);
-    } if (!validateEmail(login.email)) {
-      return res.status(LOGIN_ERROR).json(emailValid);
-    } if (!validatePassword(login.password)) {
-      return res.status(LOGIN_ERROR).json(passwordValid);
-    }
-    next();
+  message: 'Pessoa palestrante não encontrada',
 };
 
 router.get('/talker', async (req, res) => {
@@ -60,6 +33,19 @@ router.get('/talker/:id', async (req, res) => {
 router.post('/login', validateLogin, (req, res) => {
   const token = randonToken();
   return res.status(HTTP_OK_STATUS).json({ token });
+});
+
+router.post('/talker', 
+validateToken,
+validateName,
+validateAge,
+validateTalk,
+validateWtchedAt,
+validateRate,
+ async (req, res) => {
+  const newTalker = req.body;
+  const nweTalkerWithId = await addIdInProjectTalker(newTalker);
+  return res.status(201).json(nweTalkerWithId);
 });
 
 module.exports = router;
