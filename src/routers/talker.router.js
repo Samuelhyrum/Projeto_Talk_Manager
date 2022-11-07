@@ -1,7 +1,8 @@
 const express = require('express');
 const { readProjectTalker, randonToken, validateLogin,
  addIdInProjectTalker, validateToken, validateName, 
- validateAge } = require('../fsUtils');
+ validateAge, 
+ writeProjectTalker } = require('../fsUtils');
  const { validateTalk, validateWtchedAt, validateRate } = require('../valids');
 
 const router = express.Router();
@@ -72,4 +73,13 @@ validateRate,
   return res.status(200).json(uptTalker);
 });
 
+router.delete('/talker/:id', validateToken, async (req, res) => {
+  const { id } = req.params;
+  const talkers = await readProjectTalker();
+  const arrayPosition = talkers.findIndex((talker) => talker.id === Number(id));
+  talkers.splice(arrayPosition, 1);
+  await writeProjectTalker(talkers);
+
+  res.status(204).end();
+});
 module.exports = router;

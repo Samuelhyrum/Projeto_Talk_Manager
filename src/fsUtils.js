@@ -130,18 +130,6 @@ const validateAge = (req, res, next) => {
    return next();
 };
 
-//  const updateTalkeers = async (id, updateTalker) => {
-//     const oldTalkers = await readProjectTalker();
-//     const uptTalker = { id, ...updateTalker };
-//     const atualTalker = oldTalkers.reduce((talkerList, currTalker) => {
-//         if (currTalker.id === id) return [...talkerList, uptTalker];
-//         return [...talkerList, currTalker];
-//     }, []);
-
-//     await writeProjectTalker(atualTalker);
-//     return uptTalker;
-// };
-
 module.exports = {
     readProjectTalker,
     randonToken,
@@ -153,5 +141,4 @@ module.exports = {
     validateToken,
     validateName,
     validateAge,
-    // updateTalkeers,
 };
