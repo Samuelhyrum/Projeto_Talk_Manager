@@ -1,6 +1,7 @@
 const express = require('express');
 const { readProjectTalker, randonToken, validateLogin,
- addIdInProjectTalker, validateToken, validateName, validateAge } = require('../fsUtils');
+ addIdInProjectTalker, validateToken, validateName, 
+ validateAge } = require('../fsUtils');
  const { validateTalk, validateWtchedAt, validateRate } = require('../valids');
 
 const router = express.Router();
@@ -46,6 +47,29 @@ validateRate,
   const newTalker = req.body;
   const nweTalkerWithId = await addIdInProjectTalker(newTalker);
   return res.status(201).json(nweTalkerWithId);
+});
+
+router.put('/talker/:id', 
+validateToken,
+validateName,
+validateAge,
+validateTalk,
+validateWtchedAt,
+validateRate,
+ async (req, res) => {
+  const { id } = req.params;
+  const { name, age, talk } = req.body;
+  const talkers = await readProjectTalker();
+  const uptTalker = talkers.find((talker) => talker.id === Number(id));
+
+  if (!uptTalker) {
+    res.status(404).json({ message: 'Talker not found' });
+  }
+  uptTalker.name = name;
+  uptTalker.age = age;
+  uptTalker.talk = talk;
+  await addIdInProjectTalker(uptTalker);
+  return res.status(200).json(uptTalker);
 });
 
 module.exports = router;

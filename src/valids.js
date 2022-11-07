@@ -27,7 +27,7 @@ const validateWtchedAt = (req, res, next) => {
     const validateRate = (req, res, next) => {
         const talker = req.body;
         const rateNumber = talker.talk.rate >= 1 && talker.talk.rate <= 5;
-        if (!talker.talk.rate) {
+        if (talker.talk.rate === undefined) {
             return res.status(400).json({
                 message: 'O campo "rate" é obrigatório',
               });
@@ -38,10 +38,10 @@ const validateWtchedAt = (req, res, next) => {
             return res.status(400).json({
                 message: 'O campo "rate" deve ser um inteiro de 1 à 5',
               });
-        };
-
+            };
 module.exports = {
     validateTalk,
     validateWtchedAt,
     validateRate,
+
 };
