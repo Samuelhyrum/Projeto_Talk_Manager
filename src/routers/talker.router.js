@@ -32,7 +32,7 @@ router.get('/talker/:id', async (req, res) => {
    return res.status(HTTP_OK_STATUS).json(foundTalker);
 });
 
-router.post('/login', validateLogin, (req, res) => {
+router.post('/login', validateLogin, (_req, res) => {
   const token = randonToken();
   return res.status(HTTP_OK_STATUS).json({ token });
 });
